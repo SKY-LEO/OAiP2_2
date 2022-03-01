@@ -1,11 +1,7 @@
-//#include <stdlib.h>
-//#include <io.h>
-//#include <conio.h>
 #include <iostream>
 #include <ctime>
 
 using namespace std;
-
 
 struct Stack
 {
@@ -14,19 +10,19 @@ struct Stack
 };
 
 Stack* pushStack(Stack* begin, int number);
-void viewStack(Stack* begin);
+Stack* viewStack(Stack* begin);
+Stack* individualTask1(Stack** begin, Stack** max);
+Stack* individualTask2(Stack** begin, int* max_number);
 void deleteStack(Stack** begin);
 void fillStack(Stack** begin, bool is_random = false);
-Stack* individualTask1(Stack** begin, Stack** max);
-Stack* individualTask2(Stack** begin, int max_number);
-bool isCorrectTask(Stack** begin, Stack** max, int& max_number);
+bool isCorrectTask(Stack** begin, Stack** max, int* max_number);
 int popStack(Stack** begin);
 int correctInputInt();
 
 int main()
 {
 	Stack* begin = NULL, * max = NULL, * new_stack = NULL;
-	int max_number;
+	int* max_number = NULL;
 	while (true)
 	{
 		int code = 0;
@@ -57,31 +53,31 @@ int main()
 				break;
 			}
 			break;
-		case 3: if (isCorrectTask(&begin, &max, max_number))
-		{
-			new_stack = individualTask1(&begin, &max);
-			cout << "New Stack:" << endl;
-			viewStack(new_stack);
-			cout << "Old Stack:" << endl;
-			viewStack(begin);
-		}
-			  else
-		{
-			cout << "Bad Stack, nothing interesting!" << endl;
-		}
-
-			  break;
+		case 3:
 		case 4:
-			isCorrectTask(&begin, &max, max_number);
-			new_stack = individualTask2(&begin, max_number);
-			cout << "New Stack:" << endl;
-			viewStack(new_stack);
-			cout << "Old Stack:" << endl;
-			viewStack(begin);
+			if (isCorrectTask(&begin, &max, max_number))
+			{
+				if (code == 3)
+				{
+					new_stack = individualTask1(&begin, &max);
+				}
+				else
+				{
+					new_stack = individualTask2(&begin, max_number);
+				}
+				cout << "New Stack:" << endl;
+				viewStack(new_stack);
+				cout << "Old Stack:" << endl;
+				viewStack(begin);
+			}
+			else
+			{
+				cout << "Bad Stack, nothing interesting!" << endl;
+			}
 			break;
 		case 5: viewStack(begin);
 			break;
-		case 6: 
+		case 6:
 			if (begin) deleteStack(&begin);
 			if (new_stack) deleteStack(&new_stack);
 			break;
@@ -111,6 +107,14 @@ void fillStack(Stack** begin, bool is_random)
 		min = correctInputInt();
 		cout << "Enter max:" << endl;
 		max = correctInputInt();
+		if (min > max)
+		{
+			cout << "Min > Max, swap them!" << endl;
+			int temp;
+			temp =  min;
+			min = max;
+			max = temp;
+		}
 		for (int i = 0; i < n; i++)
 		{
 			number = rand() % (max - min + 1) + min;
@@ -142,14 +146,12 @@ Stack* individualTask1(Stack** begin, Stack** max)
 	return new_stack;
 }
 
-
-
-Stack* individualTask2(Stack** begin, int max_number)
+Stack* individualTask2(Stack** begin, int* max_number)
 {
 	Stack* new_stack = NULL;
 	Stack* temp = (*begin)->next;
 	int variable;
-	while (temp->number < max_number)
+	while (temp->number < *max_number)
 	{
 		variable = popStack(&temp);
 		new_stack = pushStack(new_stack, variable);
@@ -158,8 +160,12 @@ Stack* individualTask2(Stack** begin, int max_number)
 	return new_stack;
 }
 
-bool isCorrectTask(Stack** begin, Stack** max, int& max_number)
+bool isCorrectTask(Stack** begin, Stack** max, int* max_number)
 {
+	if (*begin == NULL)
+	{
+		return false;
+	}
 	Stack* temp = (*begin)->next;
 	*max = *begin;
 	int i = 0;
@@ -171,14 +177,9 @@ bool isCorrectTask(Stack** begin, Stack** max, int& max_number)
 		}
 		temp = temp->next;
 		i++;
-		//new_begin->next = temp->next;
-		//delete temp;
-		//temp = new_begin->next;
 	}
-	//?delete temp;
-	//Stack* gg = max->next;
-	max_number = (*max)->number;
-	cout << "MAX " << max_number << endl;
+	max_number = &(*max)->number;
+	cout << "MAX " << *max_number << endl;
 	if (*max == *begin || *max == (*begin)->next || i < 3)
 	{
 		return false;
@@ -207,14 +208,16 @@ int popStack(Stack** begin)//по адресу
 	return out;
 }
 
-void viewStack(Stack* begin)
+Stack* viewStack(Stack* begin)
 {
-	while (begin)
+	if (begin)
 	{
 		cout << begin->number << "\t";
 		begin = begin->next;
+		return viewStack(begin);
 	}
 	cout << endl;
+	return begin;	
 }
 
 void deleteStack(Stack** begin)//по адресу
