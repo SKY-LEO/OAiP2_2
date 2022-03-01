@@ -37,7 +37,7 @@ int main()
 		case 2:
 			if (code == 1 && begin != NULL)
 			{
-				cout << "Delete previous stack" << endl;
+				cout << "Delete previous Stack" << endl;
 				deleteStack(&begin);
 			}
 			do
