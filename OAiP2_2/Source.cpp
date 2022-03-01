@@ -48,9 +48,9 @@ int main()
 			switch (code)
 			{
 			case 1: fillStack(&begin, true);
-				break;
+				continue;
 			case 2: fillStack(&begin);
-				break;
+				continue;
 			}
 			break;
 		case 3:
