@@ -11,18 +11,18 @@ struct Stack
 
 Stack* pushStack(Stack* begin, int number);
 Stack* viewStack(Stack* begin);
-Stack* individualTask1(Stack** begin, Stack** max);
-Stack* individualTask2(Stack** begin, int* max_number);
-void deleteStack(Stack** begin);
-void fillStack(Stack** begin, bool is_random = false);
-bool isCorrectTask(Stack** begin, Stack** max, int* max_number);
-int popStack(Stack** begin);
+Stack* individualTask1(Stack*& begin, Stack*& max);
+Stack* individualTask2(Stack*& begin, int& max_number);
+void deleteStack(Stack*& begin);
+void fillStack(Stack*& begin, bool is_random = false);
+bool isCorrectTask(Stack*& begin, Stack*& max, int& max_number);
+int popStack(Stack*& begin);
 int correctInputInt();
 
 int main()
 {
 	Stack* begin = NULL, * max = NULL, * new_stack = NULL;
-	int* max_number = NULL;
+	int max_number;
 	while (true)
 	{
 		int code = 0;
@@ -38,7 +38,7 @@ int main()
 			if (code == 1 && begin != NULL)
 			{
 				cout << "Delete previous Stack" << endl;
-				deleteStack(&begin);
+				deleteStack(begin);
 			}
 			do
 			{
@@ -47,23 +47,23 @@ int main()
 			} while (code < 1 || code > 2);
 			switch (code)
 			{
-			case 1: fillStack(&begin, true);
+			case 1: fillStack(begin, true);
 				continue;
-			case 2: fillStack(&begin);
+			case 2: fillStack(begin);
 				continue;
 			}
 			break;
 		case 3:
 		case 4:
-			if (isCorrectTask(&begin, &max, max_number))
+			if (isCorrectTask(begin, max, max_number))
 			{
 				if (code == 3)
 				{
-					new_stack = individualTask1(&begin, &max);
+					new_stack = individualTask1(begin, max);
 				}
 				else
 				{
-					new_stack = individualTask2(&begin, max_number);
+					new_stack = individualTask2(begin, max_number);
 				}
 				cout << "New Stack:" << endl;
 				viewStack(new_stack);
@@ -78,20 +78,20 @@ int main()
 		case 5: viewStack(begin);
 			break;
 		case 6:
-			if (begin) deleteStack(&begin);
-			if (new_stack) deleteStack(&new_stack);
+			if (begin) deleteStack(begin);
+			if (new_stack) deleteStack(new_stack);
 			break;
 		case 0:
 			cout << "Safe exit..." << endl;
-			if (begin) deleteStack(&begin);
-			if (new_stack) deleteStack(&new_stack);
+			if (begin) deleteStack(begin);
+			if (new_stack) deleteStack(new_stack);
 			system("pause");
 			return 0;
 		}
 	}
 }
 
-void fillStack(Stack** begin, bool is_random)
+void fillStack(Stack*& begin, bool is_random)
 {
 	int n, number;
 	do
@@ -118,7 +118,7 @@ void fillStack(Stack** begin, bool is_random)
 		for (int i = 0; i < n; i++)
 		{
 			number = rand() % (max - min + 1) + min;
-			*begin = pushStack(*begin, number);
+			begin = pushStack(begin, number);
 		}
 	}
 	else
@@ -127,60 +127,60 @@ void fillStack(Stack** begin, bool is_random)
 		{
 			cout << "Enter number: " << endl;
 			number = correctInputInt();
-			*begin = pushStack(*begin, number);
+			begin = pushStack(begin, number);
 		}
 	}
 }
 
-Stack* individualTask1(Stack** begin, Stack** max)
+Stack* individualTask1(Stack*& begin, Stack*& max)
 {
 	Stack* new_stack = NULL;
-	Stack* temp = (*begin)->next;
+	Stack* temp = begin->next;
 	int variable;
-	while (temp != *max)
+	while (temp != max)
 	{
-		variable = popStack(&temp);
+		variable = popStack(temp);
 		new_stack = pushStack(new_stack, variable);
 	}
-	(*begin)->next = *max;
+	begin->next = max;
 	return new_stack;
 }
 
-Stack* individualTask2(Stack** begin, int* max_number)
+Stack* individualTask2(Stack*& begin, int& max_number)
 {
 	Stack* new_stack = NULL;
-	Stack* temp = (*begin)->next;
+	Stack* temp = begin->next;
 	int variable;
-	while (temp->number < *max_number)
+	while (temp->number < max_number)
 	{
-		variable = popStack(&temp);
+		variable = popStack(temp);
 		new_stack = pushStack(new_stack, variable);
 	}
-	(*begin)->next = temp;
+	begin->next = temp;
 	return new_stack;
 }
 
-bool isCorrectTask(Stack** begin, Stack** max, int* max_number)
+bool isCorrectTask(Stack*& begin, Stack*& max, int& max_number)
 {
-	if (*begin == NULL)
+	if (begin == NULL)
 	{
 		return false;
 	}
-	Stack* temp = (*begin)->next;
-	*max = *begin;
+	Stack* temp = begin->next;
+	max = begin;
 	int i = 0;
 	while (temp)
 	{
-		if ((*max)->number < temp->number)
+		if (max->number < temp->number)
 		{
-			*max = temp;
+			max = temp;
 		}
 		temp = temp->next;
 		i++;
 	}
-	max_number = &(*max)->number;
-	cout << "MAX " << *max_number << endl;
-	if (*max == *begin || *max == (*begin)->next || i < 3)
+	max_number = max->number;
+	cout << "MAX " << max_number << endl;
+	if (max == begin || max == begin->next || i < 3)
 	{
 		return false;
 	}
@@ -198,12 +198,12 @@ Stack* pushStack(Stack* begin, int number)
 	return temp;
 }
 
-int popStack(Stack** begin)//по адресу
+int popStack(Stack*& begin)//по адресу
 {
-	Stack* temp = *begin;
+	Stack* temp = begin;
 	int out;
-	out = (*begin)->number;
-	*begin = (*begin)->next;
+	out = begin->number;
+	begin = begin->next;
 	delete temp;
 	return out;
 }
@@ -220,18 +220,17 @@ Stack* viewStack(Stack* begin)
 	return begin;	
 }
 
-void deleteStack(Stack** begin)//по адресу
+void deleteStack(Stack*& begin)//по адресу
 {
 	Stack* temp;
-	while (*begin)
+	while (begin)
 	{
-		temp = *begin;
-		*begin = (*begin)->next;
+		temp = begin;
+		begin = begin->next;
 		delete temp;
 	}
 	cout << "Stack deleted succesfully" << endl;
 }
-
 
 int correctInputInt()
 {
