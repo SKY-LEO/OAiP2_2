@@ -42,7 +42,7 @@ int main()
 			}
 			do
 			{
-				cout << "How you want to fill stack? \n By random - 1\n By keyboard - 2\n";
+				cout << "How you want to fill Stack? \n By random - 1\n By keyboard - 2\n";
 				code = correctInputInt();
 			} while (code < 1 || code > 2);
 			switch (code)
