@@ -25,7 +25,7 @@ int main()
 	int max_number;
 	while (true)
 	{
-		int code = 0;
+		int code;
 		do
 		{
 			cout << "\n Create - 1\n Add - 2\n Individual task_variant1 - 3\n Individual task_variant2 - 4\n View Stack - 5\n Delete Stack - 6\n EXIT - 0\n";
@@ -200,11 +200,9 @@ Stack* pushStack(Stack* begin, int number)
 
 int popStack(Stack*& begin)//по адресу
 {
-	Stack* temp = begin;
 	int out;
 	out = begin->number;
 	begin = begin->next;
-	delete temp;
 	return out;
 }
 
@@ -212,7 +210,7 @@ Stack* viewStack(Stack* begin)
 {
 	if (begin)
 	{
-		cout << begin->number << "\t";
+		cout << begin->number << '\t';
 		begin = begin->next;
 		return viewStack(begin);
 	}
@@ -222,14 +220,11 @@ Stack* viewStack(Stack* begin)
 
 void deleteStack(Stack*& begin)//по адресу
 {
-	Stack* temp;
 	while (begin)
 	{
-		temp = begin;
 		begin = begin->next;
-		delete temp;
 	}
-	cout << "Stack deleted succesfully" << endl;
+	cout << "Stack deleted successfully" << endl;
 }
 
 int correctInputInt()
