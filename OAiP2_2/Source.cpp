@@ -52,7 +52,6 @@ int main()
 			case 2: fillStack(begin);
 				continue;
 			}
-			break;
 		case 3:
 		case 4:
 			if (isCorrectTask(begin, max, max_number))
