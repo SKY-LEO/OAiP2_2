@@ -110,7 +110,7 @@ void fillStack(Stack*& begin, bool is_random)
 		{
 			cout << "Min > Max, swap them!" << endl;
 			int temp;
-			temp =  min;
+			temp = min;
 			min = max;
 			max = temp;
 		}
@@ -199,9 +199,11 @@ Stack* pushStack(Stack* begin, int number)
 
 int popStack(Stack*& begin)//по адресу
 {
+	Stack* temp = begin;
 	int out;
 	out = begin->number;
 	begin = begin->next;
+	delete temp;
 	return out;
 }
 
@@ -214,14 +216,16 @@ Stack* viewStack(Stack* begin)
 		return viewStack(begin);
 	}
 	cout << endl;
-	return begin;	
+	return begin;
 }
 
 void deleteStack(Stack*& begin)//по адресу
 {
 	while (begin)
 	{
+		Stack* temp = begin;
 		begin = begin->next;
+		delete temp;
 	}
 	cout << "Stack deleted successfully" << endl;
 }
