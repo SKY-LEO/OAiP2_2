@@ -22,10 +22,9 @@ int correctInputInt();
 int main()
 {
 	Stack* begin = NULL, * max = NULL, * new_stack = NULL;
-	int max_number;
+	int max_number, code;
 	while (true)
 	{
-		int code;
 		do
 		{
 			cout << "\n Create - 1\n Add - 2\n Individual task_variant1 - 3\n Individual task_variant2 - 4\n View Stack - 5\n Delete Stack - 6\n EXIT - 0\n";
