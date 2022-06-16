@@ -1,3 +1,7 @@
+/*
+* Перенести из созданного списка в новый список все элементы, находящиеся между вершиной и максимальным элементом.
+*/
+
 #include <iostream>
 #include <ctime>
 
@@ -25,11 +29,22 @@ int main()
 	int max_number, code;
 	while (true)
 	{
-		do
+		if (begin == NULL)
 		{
-			cout << "\n Create - 1\n Add - 2\n Individual task_variant1 - 3\n Individual task_variant2 - 4\n View Stack - 5\n Delete Stack - 6\n EXIT - 0\n";
-			code = correctInputInt();
-		} while (code < 0 || code > 6);
+			do
+			{
+				cout << "\n Create - 1\n EXIT - 0\n";
+				code = correctInputInt();
+			} while (code < 0 || code > 1);
+		}
+		else
+		{
+			do
+			{
+				cout << "\n Create - 1\n Add - 2\n Individual task_variant1 - 3\n Individual task_variant2 - 4\n View Stack - 5\n Delete Stack - 6\n EXIT - 0\n";
+				code = correctInputInt();
+			} while (code < 0 || code > 6);
+		}
 		switch (code)
 		{
 		case 1:
@@ -73,7 +88,8 @@ int main()
 				cout << "Bad Stack, nothing interesting!" << endl;
 			}
 			break;
-		case 5: viewStack(begin);
+		case 5: 
+			viewStack(begin);
 			break;
 		case 6:
 			if (begin) deleteStack(begin);
@@ -196,7 +212,7 @@ Stack* pushStack(Stack* begin, int number)
 	return temp;
 }
 
-int popStack(Stack*& begin)//по адресу
+int popStack(Stack*& begin)
 {
 	Stack* temp = begin;
 	int out;
@@ -218,7 +234,7 @@ Stack* viewStack(Stack* begin)
 	return begin;
 }
 
-void deleteStack(Stack*& begin)//по адресу
+void deleteStack(Stack*& begin)
 {
 	while (begin)
 	{
@@ -241,7 +257,7 @@ int correctInputInt()
 		else
 		{
 			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cin.ignore(256, '\n');
 			cout << "Error, please write INT numbers!\n" << "Try again!" << endl;
 		}
 	}
